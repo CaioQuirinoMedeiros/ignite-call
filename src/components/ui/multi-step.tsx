@@ -1,5 +1,3 @@
-'use client'
-
 import * as React from 'react'
 
 import { cn } from '@/utils/styles'
@@ -19,7 +17,7 @@ const MultiStep = React.forwardRef<MultiStep, MultiStepProps>((props, ref) => {
       <span className='text-xs'>
         Passo {currentStep} de {size}
       </span>
-      <div className={`grid gap-2 mt-1 grid-cols-[repeat(${size},_1fr)]`}>
+      <div className={`grid gap-2 mt-1 grid-cols-[repeat(auto-fit,_minmax(0,1fr))]`}>
         {Array.from({ length: size }, (_, i) => i + 1).map((step) => {
           return (
             <div

@@ -33,7 +33,9 @@ module.exports = {
         'gray-900': '#121214',
 
         'main-300': '#00B37E',
-        'main-500': '#00875F'
+        'main-500': '#00875F',
+
+        error: "#f75a68"
       },
       keyframes: {
         'accordion-down': {

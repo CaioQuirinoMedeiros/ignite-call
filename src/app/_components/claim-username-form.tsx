@@ -55,7 +55,7 @@ export default function ClaimUsernameForm() {
 
       <span
         className={cn('mt-2 flex text-gray-400 text-sm', {
-          ['text-red-500']: !!errors.username?.message
+          ['text-error']: !!errors.username?.message
         })}
       >
         {errors.username?.message || 'Digite o nome do usuário desejado'}
