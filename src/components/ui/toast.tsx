@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ToastPrimitives from '@radix-ui/react-toast'
-import { X } from 'phosphor-react'
+import { X } from 'lucide-react'
 
 import { cn } from '@/utils/styles'
 
