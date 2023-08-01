@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '@/components/ui/input'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@/utils/styles'
+import { useRouter } from 'next/navigation'
 
 const claimUserNameFormSchema = z.object({
   username: z
@@ -23,10 +24,11 @@ const claimUserNameFormSchema = z.object({
 type ClaimUserNameFormData = z.infer<typeof claimUserNameFormSchema>
 
 export default function ClaimUsernameForm() {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors, isSubmitting }
   } = useForm<ClaimUserNameFormData>({
     resolver: zodResolver(claimUserNameFormSchema),
     defaultValues: {
@@ -36,6 +38,7 @@ export default function ClaimUsernameForm() {
 
   async function handleClaimUsername(formData: ClaimUserNameFormData) {
     console.log(formData)
+    await router.push(`/register?username=${formData.username}`)
   }
 
   return (
@@ -47,7 +50,7 @@ export default function ClaimUsernameForm() {
           placeholder='seu-usuario'
           {...register('username')}
         />
-        <Button size='sm' type='submit'>
+        <Button size='sm' type='submit' disabled={isSubmitting}>
           Reservar usuário
           <ArrowRight />
         </Button>
