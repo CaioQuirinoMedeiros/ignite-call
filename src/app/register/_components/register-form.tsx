@@ -10,6 +10,8 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSearchParams } from 'next/navigation'
 import { api } from '@/lib/axios'
+import { AxiosError } from 'axios'
+import { useToast } from '@/components/ui/use-toast'
 
 const registerFormSchema = z.object({
   username: z
@@ -26,6 +28,7 @@ type RegisterFormData = z.infer<typeof registerFormSchema>
 
 export default function RegisterForm() {
   const searchParams = useSearchParams()
+  const { toast } = useToast()
 
   const usernameQueryParam = searchParams.get('username')
 
@@ -54,7 +57,17 @@ export default function RegisterForm() {
       })
 
       console.log(response)
-    } catch {}
+    } catch (error: any) {
+      console.log(error)
+      if (error instanceof AxiosError) {
+        if (error.response?.data?.message) {
+          toast({
+            title: 'Erro do servidor',
+            description: error.response.data.message,
+          })
+        }
+      }
+    }
   }
 
   return (

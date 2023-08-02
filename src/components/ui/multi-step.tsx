@@ -23,7 +23,7 @@ const MultiStep = React.forwardRef<MultiStep, MultiStepProps>((props, ref) => {
             <div
               key={step}
               className={cn('h-1 rounded-[1px] bg-gray-600', {
-                ['bg-gray-100']: step >= size
+                ['bg-gray-100']: step <= currentStep
               })}
             />
           )
