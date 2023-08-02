@@ -8,7 +8,7 @@ import { ArrowRight } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { api } from '@/lib/axios'
 import { AxiosError } from 'axios'
 import { useToast } from '@/components/ui/use-toast'
@@ -28,6 +28,7 @@ type RegisterFormData = z.infer<typeof registerFormSchema>
 
 export default function RegisterForm() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const { toast } = useToast()
 
   const usernameQueryParam = searchParams.get('username')
@@ -49,21 +50,20 @@ export default function RegisterForm() {
   }, [setValue, usernameQueryParam])
 
   async function handleRegister(formData: RegisterFormData) {
-    console.log(formData)
     try {
-      const response = await api.post('/users', {
+      await api.post('/users', {
         username: formData.username,
         name: formData.name
       })
 
-      console.log(response)
+      router.push(`/register/connect-calendar`)
     } catch (error: any) {
       console.log(error)
       if (error instanceof AxiosError) {
         if (error.response?.data?.message) {
           toast({
             title: 'Erro do servidor',
-            description: error.response.data.message,
+            description: error.response.data.message
           })
         }
       }
