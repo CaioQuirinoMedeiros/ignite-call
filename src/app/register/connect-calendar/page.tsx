@@ -2,9 +2,12 @@ import { MultiStep } from '@/components/ui/multi-step'
 
 import { Box } from '@/components/ui/box'
 import { Button } from '@/components/ui/button'
-import { ArrowRight } from 'lucide-react'
+import { ConnectContent } from './_components/connect-content'
+import { getServerSession } from 'next-auth'
 
-export default function ConnectCalendar() {
+export default async function ConnectCalendarPage() {
+  const session = await getServerSession()
+
   return (
     <main className='max-w-[572px] mt-20 mb-4 mx-auto px-4'>
       <div className='px-6 flex flex-col'>
@@ -18,14 +21,10 @@ export default function ConnectCalendar() {
       </div>
 
       <Box className='mt-6'>
-        <div className='border border-gray-600 px-6 py-4 flex flex-row items-center justify-between rounded-md mb-4'>
-          <span className='text-gray-100'>Google Calendar</span>
-          <Button variant='secondary'>
-            Conectar
-            <ArrowRight />
-          </Button>
-        </div>
-        <Button className='w-full' disabled>Próximo passo</Button>
+        <ConnectContent />
+        <Button className='w-full' disabled={!session?.user}>
+          Próximo passo
+        </Button>
       </Box>
     </main>
   )

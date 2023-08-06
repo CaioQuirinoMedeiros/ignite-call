@@ -1,8 +1,13 @@
 import Image from 'next/image'
 import { Images } from '@/assets'
 import ClaimUsernameForm from './_components/claim-username-form'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
-export default function Home() {
+export default async function HomePage() {
+  const session = await getServerSession(authOptions)
+  console.log('session', session)
+
   return (
     <div className='flex flex-row items-center h-screen px-10 lg:px-0 lg:ml-[7.5rem] gap-20 max-w-screen-xl overflow-x-hidden'>
       <div className=''>
