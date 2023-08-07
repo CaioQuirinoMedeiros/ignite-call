@@ -1,6 +1,13 @@
-import { authOptions } from '@/lib/auth'
+import { createAuthOptions } from '@/lib/auth/auth-options'
+import { cookies } from 'next/headers'
 import NextAuth from 'next-auth'
 
-const handler = NextAuth(authOptions)
+export async function GET(...args: any[]) {
+  const cookiesStore = cookies()
+  return NextAuth(createAuthOptions(cookiesStore))(...args)
+}
 
-export { handler as GET, handler as POST }
+export async function POST(...args: any[]) {
+  const cookiesStore = cookies()
+  return NextAuth(createAuthOptions(cookiesStore))(...args)
+}

@@ -1,15 +1,11 @@
-import { MultiStep } from '@/components/ui/multi-step'
-
 import { Box } from '@/components/ui/box'
-import { Button } from '@/components/ui/button'
-import { ArrowRight } from 'lucide-react'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
-import { redirect } from 'next/navigation'
+import { createAuthOptions } from '@/lib/auth/auth-options'
 import { ProfileClient } from './_components/profile-client'
+import { cookies } from 'next/headers'
 
 export default async function Profile() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession(createAuthOptions(cookies()))
   console.log('Profile session', session)
 
   return (

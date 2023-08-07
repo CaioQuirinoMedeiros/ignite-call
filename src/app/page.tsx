@@ -1,11 +1,12 @@
 import Image from 'next/image'
+import { cookies } from 'next/headers'
 import { Images } from '@/assets'
 import ClaimUsernameForm from './_components/claim-username-form'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { createAuthOptions } from '@/lib/auth/auth-options'
 
 export default async function HomePage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession(createAuthOptions(cookies()))
   console.log('session', session)
 
   return (

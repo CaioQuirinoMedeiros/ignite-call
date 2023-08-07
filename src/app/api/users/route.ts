@@ -1,11 +1,13 @@
+import { CookiesKeys } from '@/constants/cookies'
 import { prisma } from '@/lib/prisma'
-import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
 type PostUsersRequestBody = {
   username: string
   name: string
 }
+
+export const userIdCookie = '@ignitecall:userId'
 
 export async function POST(request: NextRequest) {
   const requestBody: PostUsersRequestBody = await request.json()
@@ -27,7 +29,7 @@ export async function POST(request: NextRequest) {
 
   const response = NextResponse.json({ user })
   response.cookies.set({
-    name: '@ignitecall:userId',
+    name: CookiesKeys.userId,
     value: user.id,
     maxAge: 60 * 60 * 24 * 7, // 7 dias
     path: '/'

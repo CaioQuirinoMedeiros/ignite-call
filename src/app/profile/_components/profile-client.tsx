@@ -1,23 +1,20 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { MultiStep } from '@/components/ui/multi-step'
+import * as React from 'react'
 
 import { Box } from '@/components/ui/box'
 import { Button } from '@/components/ui/button'
-import { ArrowRight } from 'lucide-react'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
-import { redirect } from 'next/navigation'
+
 import { getProviders, signIn, signOut, useSession } from 'next-auth/react'
-import GoogleProvider from "next-auth/providers/google"
 
 export function ProfileClient() {
   const { data, status, update } = useSession()
 
+  console.log({ data })
+
   React.useEffect(() => {
-    getProviders().then(providers => {
-      console.log("providers", providers)
+    getProviders().then((providers) => {
+      console.log('providers', providers)
     })
   }, [])
 
@@ -26,7 +23,7 @@ export function ProfileClient() {
       <span>stats: {status}</span>
       <pre>{JSON.stringify(data, undefined, 2)}</pre>
 
-      <Button onClick={() => signIn("google")}>SignIn</Button>
+      <Button onClick={() => signIn('google')}>SignIn</Button>
       <Button onClick={() => signOut()}>SignOut</Button>
     </Box>
   )
