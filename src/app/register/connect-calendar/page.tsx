@@ -21,13 +21,7 @@ export default async function ConnectCalendarPage() {
         <MultiStep size={4} currentStep={2} className='box-border' />
       </div>
 
-      <Box className='mt-6'>
-        <ConnectContent />
-        <Button className='w-full' disabled={!session?.user}>
-          Próximo passo
-          <ArrowRight />
-        </Button>
-      </Box>
+      <ConnectContent />
     </main>
   )
 }

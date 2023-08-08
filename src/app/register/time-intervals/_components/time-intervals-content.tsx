@@ -4,9 +4,12 @@ import { Box } from '@/components/ui/box'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
+import { useToast } from '@/components/ui/use-toast'
+import { api } from '@/lib/axios'
 import { convertTimeStringInMinutes } from '@/utils/convertTimeStringInMinutes'
 import { getWeekDays } from '@/utils/getWeekDays'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { AxiosError } from 'axios'
 import { ArrowRight } from 'lucide-react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -63,6 +66,7 @@ type TimeIntervalsFormInput = z.input<typeof timeIntervalsFormSchema>
 type TimeIntervalsFormOutput = z.output<typeof timeIntervalsFormSchema>
 
 export function TimeIntervalContent() {
+  const { toast } = useToast()
   const {
     handleSubmit,
     register,
@@ -88,8 +92,22 @@ export function TimeIntervalContent() {
 
   const weekDays = getWeekDays()
 
-  async function handleSetTimeIntervals(data: TimeIntervalsFormOutput) {
-    console.log('handleSetTimeIntervals', data)
+  async function handleSetTimeIntervals(formData: TimeIntervalsFormOutput) {
+    try {
+      await api.post('/users/time-intervals', {
+        intervals: formData.intervals
+      })
+    } catch (error) {
+      console.log(error)
+      if (error instanceof AxiosError) {
+        if (error.response?.data?.message) {
+          toast({
+            title: 'Erro do servidor',
+            description: error.response.data.message
+          })
+        }
+      }
+    }
   }
 
   const intervals = watch('intervals')

@@ -8,4 +8,5 @@ declare module '@auth/core' {
     username: string
     avatar_url: string
   }
+
 }
