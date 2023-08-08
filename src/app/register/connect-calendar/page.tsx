@@ -4,6 +4,7 @@ import { Box } from '@/components/ui/box'
 import { Button } from '@/components/ui/button'
 import { ConnectContent } from './_components/connect-content'
 import { getServerSession } from 'next-auth'
+import { ArrowRight } from 'lucide-react'
 
 export default async function ConnectCalendarPage() {
   const session = await getServerSession()
@@ -24,6 +25,7 @@ export default async function ConnectCalendarPage() {
         <ConnectContent />
         <Button className='w-full' disabled={!session?.user}>
           Próximo passo
+          <ArrowRight />
         </Button>
       </Box>
     </main>

@@ -36,7 +36,7 @@ const Input = React.forwardRef<Input, InputProps>((props, ref) => {
       <input
         type={type}
         ref={ref}
-        className='placeholder:text-gray-400 file:border-0 file:bg-transparent file:text-sm text-sm text-white bg-transparent w-full border-none outline-none disabled:cursor-not-allowed'
+        className='placeholder:text-gray-400 file:border-0 file:bg-transparent file:text-sm text-sm text-white bg-transparent w-full border-none outline-none disabled:cursor-not-allowed [color-scheme:dark]'
         {...rest}
       />
     </div>
