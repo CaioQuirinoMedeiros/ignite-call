@@ -9,12 +9,13 @@ import { cn } from '@/utils/styles'
 interface AvatarProps
   extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> {
   src: AvatarImageProps['src']
+  alt: AvatarImageProps['alt']
 }
 
 type Avatar = React.ElementRef<typeof AvatarPrimitive.Root>
 
 const Avatar = React.forwardRef<Avatar, AvatarProps>((props, ref) => {
-  const { src, className, ...rest } = props
+  const { src, alt, className, ...rest } = props
 
   return (
     <AvatarPrimitive.Root
@@ -25,7 +26,7 @@ const Avatar = React.forwardRef<Avatar, AvatarProps>((props, ref) => {
       )}
       {...rest}
     >
-      <AvatarImage src={src} />
+      <AvatarImage src={src} alt={alt} />
       <AvatarFallback>
         <User className='w-6 h-6' />
       </AvatarFallback>

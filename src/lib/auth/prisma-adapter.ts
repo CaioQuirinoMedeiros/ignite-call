@@ -15,6 +15,7 @@ function prismaUserToAdapterUser(prismaUser: PrismaUser): MyAdapterUser {
   return {
     id: prismaUser.id,
     email: prismaUser.email!,
+    bio: prismaUser.bio,
     emailVerified: null,
     name: prismaUser.name,
     username: prismaUser.username,

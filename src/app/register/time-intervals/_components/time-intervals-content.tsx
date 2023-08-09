@@ -11,6 +11,7 @@ import { getWeekDays } from '@/utils/getWeekDays'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
 import { ArrowRight } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -66,6 +67,7 @@ type TimeIntervalsFormInput = z.input<typeof timeIntervalsFormSchema>
 type TimeIntervalsFormOutput = z.output<typeof timeIntervalsFormSchema>
 
 export function TimeIntervalContent() {
+  const router = useRouter()
   const { toast } = useToast()
   const {
     handleSubmit,
@@ -97,6 +99,8 @@ export function TimeIntervalContent() {
       await api.post('/users/time-intervals', {
         intervals: formData.intervals
       })
+
+      router.push('/register/update-profile')
     } catch (error) {
       console.log(error)
       if (error instanceof AxiosError) {
