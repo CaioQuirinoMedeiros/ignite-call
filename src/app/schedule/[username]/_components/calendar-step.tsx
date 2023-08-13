@@ -7,8 +7,14 @@ import { Box } from '@/components/ui/box'
 import { TimePicker } from './time-picker'
 import { cn } from '@/utils/styles'
 
-export function CalendarStep() {
-  const [selectedDate] = React.useState(undefined)
+interface CalendarStepProps {
+  username: string
+}
+
+export function CalendarStep(props: CalendarStepProps) {
+  const { username } = props
+
+  const [selectedDate, setSelectedDate] = React.useState<Date>()
 
   const containerClass = cn(
     'mt-6 mx-auto mb-0 p-0 grid max-w-full relative grid-cols-1',
@@ -17,8 +23,8 @@ export function CalendarStep() {
 
   return (
     <Box className={containerClass}>
-      <Calendar />
-      {!!selectedDate && <TimePicker />}
+      <Calendar selectedDate={selectedDate} onDateSelected={setSelectedDate} />
+      {!!selectedDate && <TimePicker date={selectedDate} username={username} />}
     </Box>
   )
 }

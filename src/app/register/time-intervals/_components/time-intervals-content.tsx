@@ -102,7 +102,6 @@ export function TimeIntervalContent() {
 
       router.push('/register/update-profile')
     } catch (error) {
-      console.log(error)
       if (error instanceof AxiosError) {
         if (error.response?.data?.message) {
           toast({

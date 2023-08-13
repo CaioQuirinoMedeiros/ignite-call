@@ -13,7 +13,9 @@ import {
   subDays,
   addDays,
   getWeek,
-  getDate
+  getDate,
+  isPast,
+  endOfDay
 } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import { capitalize } from '@/utils/capitalize'
@@ -23,12 +25,14 @@ type CalendarDate = {
   disabled: boolean
 }
 
-type CalendarWeek = {
-  week: number
-  days: CalendarDate[]
+interface CalendarProps {
+  selectedDate?: Date
+  onDateSelected?(date: Date): void
 }
 
-export function Calendar() {
+export function Calendar(props: CalendarProps) {
+  const { onDateSelected, selectedDate } = props
+
   const [currentDate, setCurrentDate] = React.useState(setDate(new Date(), 1))
 
   const currentMonth = format(currentDate, 'MMMM', { locale: ptBR })
@@ -45,7 +49,8 @@ export function Calendar() {
     const daysInMonth: CalendarDate[] = Array.from({
       length: getDaysInMonth(currentDate)
     }).map((_, index) => {
-      return { date: setDate(currentDate, index + 1), disabled: false }
+      const date = setDate(currentDate, index + 1)
+      return { date: date, disabled: isPast(endOfDay(date)) }
     })
 
     while (getDay(daysInMonth[0].date) !== 0) {
@@ -73,7 +78,9 @@ export function Calendar() {
     })
   }, [currentDate])
 
-  console.log(calendarWeeks)
+  function handleSelectCalendarDate(calendarDate: CalendarDate) {
+    onDateSelected && onDateSelected(calendarDate.date)
+  }
 
   return (
     <div className='flex flex-col gap-6 p-6'>
@@ -125,6 +132,7 @@ export function Calendar() {
                       <button
                         disabled={calendarDate.disabled}
                         className='w-full aspect-square bg-gray-600 text-center cursor-pointer rounded-md hover:bg-gray-500 disabled:bg-transparent disabled:opacity-40 disabled:cursor-default transition-all'
+                        onClick={() => handleSelectCalendarDate(calendarDate)}
                       >
                         {getDate(calendarDate.date)}
                       </button>

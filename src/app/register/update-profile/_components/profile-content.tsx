@@ -51,7 +51,6 @@ export function ProfileContent() {
 
       router.push(`/schedule/${session.data?.user?.username}`)
     } catch (error) {
-      console.log(error)
       if (error instanceof AxiosError) {
         if (error.response?.data?.message) {
           toast({
@@ -62,8 +61,6 @@ export function ProfileContent() {
       }
     }
   }
-
-  console.log(session.data?.user)
 
   if (session.status === 'unauthenticated') {
     signIn('google')

@@ -6,7 +6,6 @@ import { cookies } from 'next/headers'
 
 export default async function Profile() {
   const session = await getServerSession(createAuthOptions(cookies()))
-  console.log('Profile session', session)
 
   return (
     <main className='max-w-[572px] mt-20 mb-4 mx-auto px-4 flex flex-col gap-6'>

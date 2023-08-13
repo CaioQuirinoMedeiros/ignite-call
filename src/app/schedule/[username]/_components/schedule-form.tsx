@@ -1,6 +1,12 @@
-import { CalendarStep } from "./calendar-step";
-import { ConfirmStep } from "./confirm-step";
+import { CalendarStep } from './calendar-step'
+import { ConfirmStep } from './confirm-step'
 
-export function ScheduleForm() {
-  return <CalendarStep />
+interface ScheduleFormProps {
+  username: string
+}
+
+export function ScheduleForm(props: ScheduleFormProps) {
+  const { username } = props
+
+  return <CalendarStep username={username} />
 }

@@ -58,7 +58,6 @@ export default function RegisterForm() {
 
       router.push(`/register/connect-calendar`)
     } catch (error: any) {
-      console.log(error)
       if (error instanceof AxiosError) {
         if (error.response?.data?.message) {
           toast({

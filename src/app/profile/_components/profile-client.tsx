@@ -5,18 +5,10 @@ import * as React from 'react'
 import { Box } from '@/components/ui/box'
 import { Button } from '@/components/ui/button'
 
-import { getProviders, signIn, signOut, useSession } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 export function ProfileClient() {
-  const { data, status, update } = useSession()
-
-  console.log({ data })
-
-  React.useEffect(() => {
-    getProviders().then((providers) => {
-      console.log('providers', providers)
-    })
-  }, [])
+  const { data, status } = useSession()
 
   return (
     <Box className='flex flex-col gap-4'>

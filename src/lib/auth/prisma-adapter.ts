@@ -43,9 +43,6 @@ export function PrismaAdapter(cookies: ReadonlyRequestCookies): Adapter {
     async createUser(user) {
       const userIdCookie = cookies.get(CookiesKeys.userId)
 
-      console.log('!!!!!!!!!!!!!!!! createUser !!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-      console.log({ user, userIdCookie })
-
       if (!userIdCookie?.value) {
         throw new Error('User ID not found on cookies.')
       }
