@@ -5,8 +5,7 @@ import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adap
 
 const googleScopeEmail = 'https://www.googleapis.com/auth/userinfo.email'
 const googleScopeProfile = 'https://www.googleapis.com/auth/userinfo.profile'
-const googleScopeCalendar =
-  'https://www.googleapis.com/auth/admin.directory.resource.calendar'
+const googleScopeCalendar = 'https://www.googleapis.com/auth/calendar'
 
 export function createAuthOptions(
   cookies: ReadonlyRequestCookies

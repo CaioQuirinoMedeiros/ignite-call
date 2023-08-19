@@ -18,7 +18,8 @@ export async function getGoogleOAuthToken(userId: string) {
   auth.setCredentials({
     access_token: account.access_token,
     refresh_token: account.refresh_token,
-    expiry_date: account.expires_at
+    expiry_date: account.expires_at,
+
   })
 
   if (!account.expires_at) {
