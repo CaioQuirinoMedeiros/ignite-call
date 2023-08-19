@@ -18,12 +18,13 @@ type UserAvailabilityResponse = {
 interface TimePickerProps {
   date: Date
   username: string
+  onSelectHour(hour: number): void
 }
 
 type Availability = AvailableHour[]
 
 export function TimePicker(props: TimePickerProps) {
-  const { date, username } = props
+  const { date, username, onSelectHour } = props
 
   const dateParam = format(date, 'yyyy-MM-dd')
 
@@ -58,6 +59,7 @@ export function TimePicker(props: TimePickerProps) {
               key={availableHour.hour.toString()}
               disabled={!availableHour.isAvailable}
               className='bg-gray-600 p-2 text-gray-100 rounded-md text-sm last:mb-6 hover:bg-gray-500 disabled:bg-transparent disabled:opacity-40 transition-all'
+              onClick={() => onSelectHour(availableHour.hour)}
             >
               {`${availableHour.hour.toString().padStart(2, '0')}:00h`}
             </button>

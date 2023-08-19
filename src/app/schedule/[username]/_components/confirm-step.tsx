@@ -4,8 +4,14 @@ import { Box } from '@/components/ui/box'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { useToast } from '@/components/ui/use-toast'
+import { api } from '@/lib/axios'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { AxiosError } from 'axios'
+import { format } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
 import { Calendar, Clock } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -20,7 +26,18 @@ const confirmFormSchema = z.object({
 type ConfirmFormInput = z.input<typeof confirmFormSchema>
 type ConfirmFormOutput = z.output<typeof confirmFormSchema>
 
-export function ConfirmStep() {
+interface ConfirmStepProps {
+  username: string
+  schedulingDate: Date
+  clearSelectedDateTime(): void
+}
+
+export function ConfirmStep(props: ConfirmStepProps) {
+  const { username, schedulingDate, clearSelectedDateTime } = props
+
+  const { toast } = useToast()
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
@@ -34,9 +51,36 @@ export function ConfirmStep() {
     resolver: zodResolver(confirmFormSchema)
   })
 
-  function handleConfirmScheduling(formData: ConfirmFormOutput) {
-    console.log({ formData })
+  async function handleConfirmScheduling(formData: ConfirmFormOutput) {
+    try {
+      await api.post(`/users/${username}/schedule`, {
+        name: formData.name,
+        email: formData.email,
+        observations: formData.observations,
+        date: schedulingDate
+      })
+
+      clearSelectedDateTime()
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.data?.message) {
+          toast({
+            title: 'Erro do servidor',
+            description: error.response.data.message
+          })
+        }
+      }
+    }
   }
+
+  const schedulingDateFormatted = format(
+    schedulingDate,
+    "dd 'de' MMMM 'de' yyyy",
+    { locale: ptBR }
+  )
+  const schedulingDateHourFormatted = format(schedulingDate, "HH:mm'h'", {
+    locale: ptBR
+  })
 
   return (
     <form onSubmit={handleSubmit(handleConfirmScheduling)}>
@@ -44,11 +88,11 @@ export function ConfirmStep() {
         <div className='flex items-center gap-4 text-white'>
           <span className='flex items-center gap-2'>
             <Calendar className='text-gray-200 w-5 h-5' />
-            22 de Setembro de 2022
+            {schedulingDateFormatted}
           </span>
           <span className='flex items-center gap-2'>
             <Clock className='text-gray-200 w-5 h-5' />
-            08:00h
+            {schedulingDateHourFormatted}
           </span>
         </div>
 
@@ -81,7 +125,11 @@ export function ConfirmStep() {
         </label>
 
         <div className='flex gap-2 justify-end mt-2'>
-          <Button type='button' variant='tertiary'>
+          <Button
+            type='button'
+            variant='tertiary'
+            onClick={clearSelectedDateTime}
+          >
             Cancelar
           </Button>
           <Button type='submit' disabled={isSubmitting}>

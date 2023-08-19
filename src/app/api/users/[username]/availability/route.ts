@@ -25,7 +25,6 @@ export async function GET(
   request: NextRequest,
   { params }: UserAvailabilityProps
 ) {
-  console.log('AVAILABILITYYYY!!!!!!!!!!!!!!')
   const username = params.username
   const queryDate = request.nextUrl.searchParams.get('date')
 
@@ -34,8 +33,6 @@ export async function GET(
   }
 
   const date = parse(queryDate ?? '', 'yyyy-MM-dd', new Date())
-
-  console.log({ date, queryDate, past: isPast(date) })
 
   if (isPast(endOfDay(date))) {
     return NextResponse.json({ availability: [] })
@@ -63,7 +60,6 @@ export async function GET(
   while (nextHour < endHour) {
     const dateOnHour = setHours(date, nextHour)
     hours.push({ hour: nextHour, isAvailable: isFuture(dateOnHour) })
-    console.log({ date, dateOnHour, future: isFuture(dateOnHour), nextHour })
     nextHour = hours[hours.length - 1].hour + 1
   }
 
