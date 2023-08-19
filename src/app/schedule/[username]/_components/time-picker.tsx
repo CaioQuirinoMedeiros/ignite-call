@@ -4,23 +4,7 @@ import * as React from 'react'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import { api } from '@/lib/axios'
-
-const times = [
-  '09:00h',
-  '10:00h',
-  '11:00h',
-  '12:00h',
-  '13:00h',
-  '14:00h',
-  '15:00h',
-  '16:00h',
-  '17:00h',
-  '18:00h',
-  '19:00h',
-  '20:00h',
-  '21:00h',
-  '22:00h'
-]
+import { useQuery } from '@tanstack/react-query'
 
 type AvailableHour = {
   hour: number
@@ -41,19 +25,23 @@ type Availability = AvailableHour[]
 export function TimePicker(props: TimePickerProps) {
   const { date, username } = props
 
-  const [availability, setAvailability] = React.useState<Availability>([])
+  const dateParam = format(date, 'yyyy-MM-dd')
 
-  React.useEffect(() => {
-    api
-      .get<UserAvailabilityResponse>(`/users/${username}/availability`, {
-        params: {
-          date: format(date, 'yyyy-MM-dd')
+  const { data: availability } = useQuery<Availability>(
+    ['availability', { username, date: dateParam }],
+    async () => {
+      const response = await api.get<UserAvailabilityResponse>(
+        `/users/${username}/availability`,
+        {
+          params: {
+            date: dateParam
+          }
         }
-      })
-      .then((response) => {
-        setAvailability(response.data.availability)
-      })
-  }, [username, date])
+      )
+
+      return response.data.availability
+    }
+  )
 
   const weekDayFormatted = format(date, 'eeee', { locale: ptBR })
   const dayFormatted = format(date, "dd 'de' MMMM", { locale: ptBR })
@@ -64,7 +52,7 @@ export function TimePicker(props: TimePickerProps) {
         <span className='text-white'>{weekDayFormatted},</span> {dayFormatted}
       </h4>
       <div className='mt-3 grid grid-cols-2 md:grid-cols-1 gap-2'>
-        {availability.map((availableHour) => {
+        {availability?.map((availableHour) => {
           return (
             <button
               key={availableHour.hour.toString()}

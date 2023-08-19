@@ -1,13 +1,8 @@
 import Image from 'next/image'
-import { cookies } from 'next/headers'
 import { Images } from '@/assets'
 import ClaimUsernameForm from './_components/claim-username-form'
-import { getServerSession } from 'next-auth'
-import { createAuthOptions } from '@/lib/auth/auth-options'
 
 export default async function HomePage() {
-  const session = await getServerSession(createAuthOptions(cookies()))
-
   return (
     <div className='flex flex-row items-center h-screen px-10 lg:px-0 lg:ml-[7.5rem] gap-20 max-w-screen-xl overflow-x-hidden'>
       <div className=''>

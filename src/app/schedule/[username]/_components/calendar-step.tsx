@@ -23,7 +23,7 @@ export function CalendarStep(props: CalendarStepProps) {
 
   return (
     <Box className={containerClass}>
-      <Calendar selectedDate={selectedDate} onDateSelected={setSelectedDate} />
+      <Calendar username={username} onDateSelected={setSelectedDate} />
       {!!selectedDate && <TimePicker date={selectedDate} username={username} />}
     </Box>
   )

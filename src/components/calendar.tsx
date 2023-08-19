@@ -15,27 +15,59 @@ import {
   getWeek,
   getDate,
   isPast,
-  endOfDay
+  endOfDay,
+  getMonth,
+  isSameDay,
+  isWithinInterval,
+  parse,
+  parseISO
 } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import { capitalize } from '@/utils/capitalize'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/lib/axios'
 
 type CalendarDate = {
   date: Date
   disabled: boolean
 }
 
+type UserBlockedDatesResponse = {
+  blockedDates: string[]
+}
+
 interface CalendarProps {
-  selectedDate?: Date
+  username: string
   onDateSelected?(date: Date): void
 }
 
 export function Calendar(props: CalendarProps) {
-  const { onDateSelected, selectedDate } = props
+  const { username, onDateSelected } = props
 
   const [currentDate, setCurrentDate] = React.useState(setDate(new Date(), 1))
 
-  const currentMonth = format(currentDate, 'MMMM', { locale: ptBR })
+  const currentMonth = getMonth(currentDate)
+  const currentYear = currentDate.getFullYear()
+  const currentMonthFormatted = format(currentDate, 'MMMM', { locale: ptBR })
+
+  const { data: blockedDates } = useQuery<Date[]>(
+    ['blocked-dates', { username, month: currentMonth, year: currentYear }],
+    async () => {
+      const response = await api.get<UserBlockedDatesResponse>(
+        `/users/${username}/blocked-dates`,
+        {
+          params: {
+            month: currentMonth,
+            year: currentYear
+          }
+        }
+      )
+
+      return response.data.blockedDates.map((blockedDate) => {
+        return parseISO(blockedDate)
+      })
+    }
+  )
 
   function handlePrevMonth() {
     setCurrentDate((prevCurrentDate) => subMonths(prevCurrentDate, 1))
@@ -46,11 +78,17 @@ export function Calendar(props: CalendarProps) {
   }
 
   const calendarWeeks = React.useMemo(() => {
+    if (!blockedDates) return []
+
     const daysInMonth: CalendarDate[] = Array.from({
       length: getDaysInMonth(currentDate)
     }).map((_, index) => {
       const date = setDate(currentDate, index + 1)
-      return { date: date, disabled: isPast(endOfDay(date)) }
+      const isPastDate = isPast(endOfDay(date))
+      const isBlocked = blockedDates.some((blockedDate) => {
+        return isSameDay(blockedDate, date)
+      })
+      return { date: date, disabled: isPastDate || isBlocked }
     })
 
     while (getDay(daysInMonth[0].date) !== 0) {
@@ -76,7 +114,7 @@ export function Calendar(props: CalendarProps) {
     return Object.entries(datesPerWeek).map(([weekIndex, weekDays]) => {
       return weekDays
     })
-  }, [currentDate])
+  }, [currentDate, blockedDates])
 
   function handleSelectCalendarDate(calendarDate: CalendarDate) {
     onDateSelected && onDateSelected(calendarDate.date)
@@ -86,7 +124,7 @@ export function Calendar(props: CalendarProps) {
     <div className='flex flex-col gap-6 p-6'>
       <header className='flex items-center justify-between'>
         <span className='font-medium'>
-          {capitalize(currentMonth)}{' '}
+          {capitalize(currentMonthFormatted)}{' '}
           <span className='text-gray-200'>{currentDate.getFullYear()}</span>
         </span>
         <div className='flex flex-row items-center gap-2 text-gray-200'>

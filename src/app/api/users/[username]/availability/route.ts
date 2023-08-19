@@ -1,5 +1,13 @@
 import { prisma } from '@/lib/prisma'
-import { getDay, getHours, isPast, parse, setHours } from 'date-fns'
+import {
+  endOfDay,
+  getDay,
+  getHours,
+  isFuture,
+  isPast,
+  parse,
+  setHours
+} from 'date-fns'
 import { NextRequest, NextResponse } from 'next/server'
 
 type AvailableHour = {
@@ -17,6 +25,7 @@ export async function GET(
   request: NextRequest,
   { params }: UserAvailabilityProps
 ) {
+  console.log('AVAILABILITYYYY!!!!!!!!!!!!!!')
   const username = params.username
   const queryDate = request.nextUrl.searchParams.get('date')
 
@@ -26,7 +35,9 @@ export async function GET(
 
   const date = parse(queryDate ?? '', 'yyyy-MM-dd', new Date())
 
-  if (isPast(date)) {
+  console.log({ date, queryDate, past: isPast(date) })
+
+  if (isPast(endOfDay(date))) {
     return NextResponse.json({ availability: [] })
   }
 
@@ -47,11 +58,13 @@ export async function GET(
   const startHour = time_start_in_minutes / 60
   const endHour = time_end_in_minutes / 60
 
-  const hours: AvailableHour[] = [{ hour: startHour, isAvailable: true }]
-  while (hours[hours.length - 1].hour < endHour) {
-    const nextHour = hours[hours.length - 1].hour + 1
-    const hourToAdd = Math.min(nextHour, endHour)
-    hours.push({ hour: hourToAdd, isAvailable: true })
+  const hours: AvailableHour[] = []
+  let nextHour = startHour
+  while (nextHour < endHour) {
+    const dateOnHour = setHours(date, nextHour)
+    hours.push({ hour: nextHour, isAvailable: isFuture(dateOnHour) })
+    console.log({ date, dateOnHour, future: isFuture(dateOnHour), nextHour })
+    nextHour = hours[hours.length - 1].hour + 1
   }
 
   const userSchedulings = await prisma.scheduling.findMany({
