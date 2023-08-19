@@ -26,7 +26,10 @@ export function createAuthOptions(
         clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
         authorization: {
           params: {
-            scope: `${googleScopeEmail} ${googleScopeProfile} ${googleScopeCalendar}`
+            scope: `${googleScopeEmail} ${googleScopeProfile} ${googleScopeCalendar}`,
+            prompt: 'consent',
+            access_type: 'offline',
+            response_type: 'code'
           }
         }
       })
