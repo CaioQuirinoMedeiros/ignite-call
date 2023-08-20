@@ -1,10 +1,13 @@
 import { MultiStep } from '@/components/ui/multi-step'
 
-import { Box } from '@/components/ui/box'
-import { Button } from '@/components/ui/button'
 import { ConnectContent } from './_components/connect-content'
 import { getServerSession } from 'next-auth'
-import { ArrowRight } from 'lucide-react'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Conecte sua agenda do Google | Ignite Call',
+  robots: { index: false }
+}
 
 export default async function ConnectCalendarPage() {
   const session = await getServerSession()

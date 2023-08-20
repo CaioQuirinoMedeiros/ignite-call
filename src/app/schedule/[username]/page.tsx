@@ -1,10 +1,45 @@
 import { Avatar } from '@/components/ui/avatar'
 import { prisma } from '@/lib/prisma'
 import { ScheduleForm } from './_components/schedule-form'
+import { Metadata } from 'next'
+import { cache } from 'react'
 
 interface UserSchedulePageProps {
   params: { username: string }
   searchParams: {}
+}
+
+export const metadata: Metadata = {
+  title: 'Agendar | Ignite Call',
+  robots: { index: false }
+}
+
+const getUser = cache(async (username: string) => {
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { username: username }
+  })
+
+  return user
+})
+
+export async function generateMetadata(
+  props: UserSchedulePageProps
+): Promise<Metadata> {
+  const {
+    params: { username }
+  } = props
+
+  const user = await getUser(username)
+
+  return {
+    title: `Agendar com ${user.name} Ignite Call`,
+    openGraph: user.avatar_url
+      ? {
+          type: 'profile',
+          images: [user.avatar_url]
+        }
+      : undefined
+  }
 }
 
 export default async function UserSchedulePage(props: UserSchedulePageProps) {
@@ -12,9 +47,7 @@ export default async function UserSchedulePage(props: UserSchedulePageProps) {
     params: { username }
   } = props
 
-  const user = await prisma.user.findUniqueOrThrow({
-    where: { username: username }
-  })
+  const user = await getUser(username)
 
   return (
     <main className='max-w-[852px] px-4 mt-20 mb-4 mx-auto'>

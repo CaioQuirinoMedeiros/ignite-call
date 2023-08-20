@@ -1,10 +1,12 @@
 import { MultiStep } from '@/components/ui/multi-step'
 
-import { Box } from '@/components/ui/box'
-import { Button } from '@/components/ui/button'
 import { TimeIntervalContent } from './_components/time-intervals-content'
-import { getServerSession } from 'next-auth'
-import { ArrowRight } from 'lucide-react'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Selecione sua disponibilidade | Ignite Call',
+  robots: { index: false }
+}
 
 export default function TimeIntervalsPage() {
   return (

@@ -1,6 +1,13 @@
 import Image from 'next/image'
 import { Images } from '@/assets'
 import ClaimUsernameForm from './_components/claim-username-form'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Descomplique sua agenda | Ignite Call',
+  applicationName:
+    'Conecte seu calendário e permita que as pessoas marquem agendamentos no seu tempo livre'
+}
 
 export default async function HomePage() {
   return (

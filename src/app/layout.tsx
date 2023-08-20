@@ -4,10 +4,20 @@ import { Roboto } from 'next/font/google'
 import { Providers } from './providers'
 import { Toaster } from '@/components/ui/toaster'
 
-const roboto = Roboto({ subsets: ['latin'], weight: ['400', '500', '700', "900"] })
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '500', '700', '900']
+})
 
 export const metadata: Metadata = {
-  title: 'Ignite Call'
+  title: 'Ignite Call',
+  applicationName: 'Ignite Call',
+  authors: [
+    {
+      name: 'Caio Quirino Medeiros',
+      url: 'https://github.com/CaioQuirinoMedeiros'
+    }
+  ]
 }
 
 export default function RootLayout({
