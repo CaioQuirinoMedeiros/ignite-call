@@ -9,11 +9,6 @@ interface UserSchedulePageProps {
   searchParams: {}
 }
 
-export const metadata: Metadata = {
-  title: 'Agendar | Ignite Call',
-  robots: { index: false }
-}
-
 const getUser = cache(async (username: string) => {
   const user = await prisma.user.findUniqueOrThrow({
     where: { username: username }

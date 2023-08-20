@@ -7,7 +7,6 @@ type PostUsersRequestBody = {
   name: string
 }
 
-export const userIdCookie = '@ignitecall:userId'
 
 export async function POST(request: NextRequest) {
   const requestBody: PostUsersRequestBody = await request.json()
